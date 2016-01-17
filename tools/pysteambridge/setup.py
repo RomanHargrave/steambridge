@@ -44,7 +44,7 @@ def do(appid):
   # TODO: Once done, save that icon inside the appdb directory
 
   # Find the main executable
-  app.executable = os.path.abspath(app.installdir + '/' + _find_executable(app.installdir))
+  app.executable = os.path.abspath(_find_executable(app.installdir))
   print 'WARN: Using a temporary algorithm to find the main executable, found {}' \
       .format(app.executable)
 
