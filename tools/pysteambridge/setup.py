@@ -147,16 +147,8 @@ def _find_version(dll, search, name):
 # possibly including the icon data.
 def _find_executable(search):
   # First, look for any executables in the root directory
-  exes = filesystem.execute('ls "{}" | grep "\\.exe$" || true'.format(search)) \
+  exes = filesystem.execute('find "{}" -iname "*.exe" || true'.format(search)) \
       .rstrip().split('\n')
-
-  # Didn't find any?  Do a recursive find
-  if len(exes) == 1 and exes[0] == '':
-    exes = filesystem.execute('ls -R "{}" | grep "\\.exe$" || true' \
-        .format(search)).rstrip().split('\n')
-    if len(exes) == 1 and exes[0] == '':
-      raise SetupException('Cannot setup {} because no executable (*.exe) files were found' \
-          .format(appid))
 
   if len(exes) == 1:
     return exes[0]
@@ -166,7 +158,7 @@ def _find_executable(search):
   for exe in exes:
     stdout = filesystem.execute( \
         'strings "{}" | grep "steam_api\\.dll" || true' \
-        .format(os.path.abspath(search + '/' + exe))).rstrip()
+        .format(os.path.abspath(exe))).rstrip()
     if stdout != '':
       options.append(exe)
 
